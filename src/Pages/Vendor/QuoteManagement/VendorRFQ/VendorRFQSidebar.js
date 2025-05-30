@@ -47,26 +47,24 @@ const VendorRFQSidebar = ({ selectedRFQs, onSelectionChange, vendorId, purchaseI
         <div className="pi-divider"></div>
       </div>
 
-      {matched && (
         <div>
           <label className="pi-sidebar-list">
             <input
               type="checkbox"
               className="pi-checkbox"
-              checked={selectedRFQs === rfqNoFromApi}
-              onChange={handleCheckboxChange}
+              // checked={selectedRFQs === rfqNoFromApi}
+              // onChange={handleCheckboxChange}
             />
             <div className="pi-content">
               <div className="d-flex flex-column">
-                <p>RFQ NO: {rfqNoFromApi || "N/A"}</p>
-                <p>Estimated Valuation: {estimatedSum > 0 ? estimatedSum : "N/A"}</p>
+                <p>RFQ NO: 2345</p>
+                <p>Estimated Valuation: xxx</p>
               </div>
             </div>
             <p>Grandag Saudi Ltd</p>
           </label>
           <div className="pi-divider"></div>
         </div>
-      )}
     </div>
   );
 };

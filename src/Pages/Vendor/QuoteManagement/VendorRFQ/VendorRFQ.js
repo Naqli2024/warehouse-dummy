@@ -83,7 +83,7 @@ const VendorRFQ = () => {
                   onClick={toggleSidebar}
                 />
               )}
-              <p>Request For Quote #{selectedRFQs || ""}</p>
+              <p>Request For Quote #2345</p>
             </div>
             <div className="pi-head-options">
               <div className="pi-option-divider" />

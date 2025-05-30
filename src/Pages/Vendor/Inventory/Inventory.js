@@ -50,6 +50,53 @@ const Inventory = () => {
     { name: "Milk", value: 65 },
   ];
 
+    const inventoryData = [
+    {
+      id: 1,
+      image: 'https://placehold.co/40x40/E0E0E0/333333?text=Item1',
+      item: 'Bakery',
+      classification: 'Fruits',
+      sku: 'SKU-001',
+      productType: 'Own',
+      mrp: '$2.50',
+      sellingPrice: '$2.75',
+      margin: '10%',
+       tax: '5%',
+        hsnCode: '123456',
+        uom: 'kg',
+        mfgdate:'15-01-2024',
+        expdate:'15-07-2024',
+        storagecondition:'Refrigetered',
+        storageduration:'6 months',
+        currentStock: '500 kg',
+       stockQuantityAvailable: '450 kg',
+       stockValue: '$1125',
+      
+    },
+    {
+      id: 2,
+      image: 'https://placehold.co/40x40/E0E0E0/333333?text=Item2',
+      item: 'Bakery',
+      classification: 'Bakery',
+      sku: 'SKU-002',
+           productType: 'Procured',
+      mrp: '$3.00',
+      sellingPrice: '$3.30',
+      margin: '10%',
+       tax: '5%',
+        hsnCode: '654321',
+        uom: 'loaf',
+        mfgdate:'15-01-2024',
+        expdate:'15-07-2024',
+        storagecondition:'Refrigetered',
+        storageduration:'6 months',
+        currentStock: '200 loaves',
+       stockQuantityAvailable: '180 loaves',
+       stockValue: '$540',
+    },
+
+  ];
+
   const renderTableContent = () => {
     switch (activeTab) {
       case "inventory":
@@ -78,47 +125,32 @@ const Inventory = () => {
                 </tr>
               </thead>
               <tbody>
-                {vendorInventory?.map((item, index) => {
-                  const fileName = item.itemImage?.fileName;
-                  const imageData = vendorInventoryImages?.[fileName];
-                  console.log(imageData);
-                  return (
-                    <tr key={item._id || index}>
-                      <td>
-                        <div className="vendor-inventory-product-item-cell">
-                          {imageData?.url ? (
-                            <img
-                              src={imageData.url}
-                              alt={item.itemName}
-                              className="vendor-inventory-table-item-image"
-                            />
-                          ) : (
-                            <span>No Image</span>
-                          )}
-                          <span className="vendor-inventory-item-name-text">
-                            {item.itemName}
-                          </span>
-                        </div>
-                      </td>
-                      <td>{item.itemClassification}</td>
-                      <td>{item.sku}</td>
-                      <td>{item.productType}</td>
-                      <td>{item.mrp}</td>
-                      <td>{item.sellingPrice}</td>
-                      <td>{item.margin}</td>
-                      <td>{item.tax}</td>
-                      <td>{item.hsnCode}</td>
-                      <td>{item.uom}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{item.currentStock}</td>
-                      <td>{item.stockQtyAvailable}</td>
-                      <td>{item.stockValue}</td>
-                    </tr>
-                  );
-                })}
+                {inventoryData.map((data) => (
+                  <tr key={data.id}>
+                    <td>
+                      <div className="vendor-inventory-product-item-cell">
+                        <img src={data.image} alt={data.item} className="vendor-inventory-table-item-image" />
+                        <span className="vendor-inventory-item-name-text">{data.item}</span>
+                      </div>
+                    </td>
+                    <td>{data.classification}</td>
+                    <td>{data.sku}</td>
+                    <td>{data.productType}</td>
+                    <td>{data.mrp}</td>
+                    <td>{data.sellingPrice}</td>
+                    <td>{data.margin}</td>
+                    <td>{data.tax}</td>
+                    <td>{data.hsnCode}</td>
+                    <td>{data.uom}</td>
+                    <td>{data.mfgdate}</td>
+                    <td>{data.expdate}</td>
+                    <td>{data.storagecondition}</td>
+                    <td>{data.storageduration}</td>
+                    <td>{data.currentStock}</td>
+                    <td>{data.stockQuantityAvailable}</td>
+                    <td>{data.stockValue}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

@@ -111,7 +111,9 @@ const DashboardHeader = () => {
       <div class="container-fluid home">
         <nav class="mt-2 mb-2 navbar navbar-expand-lg">
           <div>
+            <Link class="navbar-brand" to="/">
             <span className="navbar-user">JackSon</span> (Admin)
+          </Link>
           </div>
           <button
             class="navbar-toggler"
