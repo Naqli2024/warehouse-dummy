@@ -1,11 +1,8 @@
-import { FaTachometerAlt, FaShoppingCart, FaBoxes, FaWarehouse, FaFileInvoice, FaUsers } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
 import Dashboard from "../images/dashboard-logo.svg";
 import Warehouse from "../images/warehouse-logo.svg"; 
 import Purchase from "../images/purchase-logo.svg"; 
 import Inventory from "../images/inventory-logo.svg"; 
 import Employees from "../images/employees-logo.svg"; 
-import Invoice from "../images/invoice-logo.svg"; 
 export const dashboardItems = [
   { item: "Dashboard", path: "dashboard", 
     image: Dashboard},
@@ -14,11 +11,16 @@ export const dashboardItems = [
     path: "purchase",
     image: Purchase,
     submenus: [
-      { item: "Purchase List", path: "purchase-list" },
-      { item: "Vendors", path: "vendors" },
-      { item: "Purchase return", path: "purchase-return" },
-      { item: "Debit note", path: "debit-note" },
-      { item: "Purchase invoice", path: "purchase-invoice" }
+      { item: "Purchase Indent", path: "purchase-indent" },
+      { item: "Request For Quote", path: "quote-request" },
+      { item: "Purchase Order", path: "purchase-order" },
+      { item: "ASN", path: "asn" },
+      { item: "Receiving QC", path: "receiving-qc" },
+      { item: "GRN", path: "grn" },
+      { item: "Inventory New Item", path: "inventory-new-item" },
+      { item: "Put", path: "put" },
+      { item: "Debit Note", path: "debit-note" },
+      { item: "Item Best Price", path: "item-best-price" }
     ],
   },
   {

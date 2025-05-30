@@ -10,6 +10,11 @@ import getAllSalesOrderSlice from "./salesOrder/getSaleOrder";
 import createSaleOrderSlice from "./salesOrder/createSaleOrder";
 import employeeReducer from "./employee/employeeSlice";
 import companyReducer from "./company/companySlice";
+import vendorReducer from "./Vendor/VendorSlice";
+import vendorInventoryReducer from "./Vendor/InventorySlice";
+import vendorInventoryImageReducer from "./Vendor/InventoryImageSlice";
+import purchaseIndentReducer from "./Purchase/purchaseIndent";
+import purchaseOrderReducer from "./Purchase/purchaseOrder";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +29,11 @@ const store = configureStore({
     createSaleOrder: createSaleOrderSlice,
     employeeReducer: employeeReducer,
     companyReducer: companyReducer,
+    vendorReducer: vendorReducer,
+    vendorInventoryReducer: vendorInventoryReducer,
+    vendorInventoryImageReducer: vendorInventoryImageReducer,
+    purchaseIndent: purchaseIndentReducer,
+    purchaseOrder: purchaseOrderReducer,
   },
 });
 

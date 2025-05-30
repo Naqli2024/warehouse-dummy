@@ -43,6 +43,16 @@ const Login = () => {
           <div className="col-12 col-md-6 login-form">
             <p className="login-text">Login</p>
             <Form.Group className="col-md-10 mb-3">
+              <Form.Label>Account Type</Form.Label>
+                            <InputGroup className="mt-2">
+                              <Form.Select className="custom-textfield">
+                                <option value="">Select Account type</option>
+                                <option>Admin</option>
+                                <option>Vendor</option>
+                              </Form.Select>
+                            </InputGroup>
+                          </Form.Group>
+            <Form.Group className="col-md-10 mb-3">
               <Form.Label>Email Id</Form.Label>
               <InputGroup>
                 <Form.Control

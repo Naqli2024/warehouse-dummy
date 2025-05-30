@@ -17,7 +17,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (

@@ -1,0 +1,82 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import vendorService from "../../Services/VendorService";
+import handleApiError from "../../Helper/handleApierror";
+
+export const createVendor = createAsyncThunk(
+  "createVendor",
+  async (vendorData, { rejectWithValue }) => {
+    try {
+      const api = vendorService;
+      const response = await api.post("/create-vendor", vendorData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
+
+export const updateVendor = createAsyncThunk(
+  "updateVendor",
+  async ({ id, updatedData }, { rejectWithValue }) => {
+    try {
+      const api = vendorService;
+      const response = await api.put(`/editVendorById/${id}`, updatedData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
+
+export const deleteVendor = createAsyncThunk(
+  "deleteVendor",
+  async (id, { rejectWithValue }) => {
+    try {
+      const api = vendorService;
+      await api.delete(`/deleteVendorById/${id}`);
+      return id; 
+    } catch (error) {
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
+
+export const vendorThunks = [createVendor, updateVendor, deleteVendor];
+
+const vendorSlice = createSlice({
+  name: "vendors",
+  initialState: {
+    loading: false,
+    vendor: null,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    const handlePending = (state) => {
+      state.loading = true;
+      state.vendor = null;
+      state.error = null;
+    };
+
+    const handleFulfilled = (state, action) => {
+      state.loading = false;
+      state.vendor = action.payload;
+      state.error = null;
+    };
+
+    const handleRejected = (state, action) => {
+      state.loading = false;
+      state.vendor = null;
+      state.error = action.payload;
+    };
+
+    vendorThunks.forEach((thunk) => {
+      builder
+        .addCase(thunk.pending, handlePending)
+        .addCase(thunk.fulfilled, handleFulfilled)
+        .addCase(thunk.rejected, handleRejected);
+    });
+  },
+});
+
+export default vendorSlice.reducer;

@@ -10,7 +10,7 @@ import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 const Main = () => {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
 
   const toggleSidebar = () => {
@@ -23,7 +23,7 @@ const Main = () => {
 
   const handleMenuToggle = (menuPath) => {
     if (isCollapsed) {
-      setIsCollapsed(false); 
+      setIsCollapsed(false);
     }
     setOpenMenu((prevMenu) => (prevMenu === menuPath ? null : menuPath));
   };
@@ -31,26 +31,46 @@ const Main = () => {
   return (
     <>
       {/* Sidebar Toggle Button */}
-      <div className="menu-icon" onClick={toggleSidebar}>
-        {isSidebarOpen ? <FaTimes className="icon" /> : <FaBars className="icon" />}
+      <div
+        className={`menu-icon ${isSidebarOpen ? "open" : ""}`} // Add the `open` class when the sidebar is open
+        onClick={toggleSidebar}
+      >
+        {isSidebarOpen ? (
+          <FaTimes className="cancel-icon" />
+        ) : (
+          <FaBars className="icon" />
+        )}
       </div>
-
       <div className="layout-container">
         {/* Sidebar */}
-        <div className={`sidebar ${isSidebarOpen ? "open" : ""} ${isCollapsed ? "collapsed" : ""}`}
-         style={{ flex: isCollapsed ? "0 0 4%" : "0 0 17%" }}>
+        <div
+          className={`sidebar ${isSidebarOpen ? "open" : ""} ${isCollapsed ? "collapsed" : ""}`}
+          style={{ flex: isCollapsed ? "0 0 4%" : "0 0 16%" }}
+        >
           <div className="warehouse">
-            <img src={warehouse} alt="warehouse"/>
+            <img src={warehouse} alt="warehouse" />
             {!isCollapsed && <h2>Warehouse</h2>}
           </div>
-
+          <hr style={{ margin: "0px 10px" }} />
           <ul className="nav flex-column">
             {dashboardItems.map((item) => (
               <React.Fragment key={item.path}>
                 <li
-                  className={`side-links ${
-                    !item.submenus && location.pathname === `/admin/${item.path}` ? "active" : ""
-                  }`}
+                  className={
+                    isCollapsed
+                      ? `collapsed-side-links ${
+                          !item.submenus &&
+                          location.pathname === `/admin/${item.path}`
+                            ? "active"
+                            : ""
+                        }`
+                      : `main-sideLinks ${
+                          !item.submenus &&
+                          location.pathname === `/admin/${item.path}`
+                            ? "active"
+                            : ""
+                        }`
+                  }
                   style={{ cursor: "pointer", position: "relative" }}
                 >
                   {item.submenus ? (
@@ -60,18 +80,28 @@ const Main = () => {
                         onClick={() => handleMenuToggle(item.path)}
                       >
                         <span className="nav-link">
-                          <img src={item.image} width={30} height={35}/> {!isCollapsed && item.item}
+                          <img src={item.image} width={30} height={35} />{" "}
+                          {!isCollapsed && item.item}
                         </span>
                         {!isCollapsed && (
                           <span className="dropdown-arrow">
-                            {openMenu === item.path ? <FaCaretDown /> : <FaCaretRight />}
+                            {openMenu === item.path ? (
+                              <FaCaretDown />
+                            ) : (
+                              <FaCaretRight />
+                            )}
                           </span>
                         )}
                       </div>
                     </>
                   ) : (
-                    <Link className="nav-link" to={`/admin/${item.path}`} onClick={toggleSidebar}>
-                     <img src={item.image} width={35} height={35}/>  {!isCollapsed && item.item}
+                    <Link
+                      className="nav-link"
+                      to={`/admin/${item.path}`}
+                      onClick={toggleSidebar}
+                    >
+                      <img src={item.image} width={35} height={35} />{" "}
+                      {!isCollapsed && item.item}
                     </Link>
                   )}
                 </li>
@@ -82,10 +112,16 @@ const Main = () => {
                       <li
                         key={submenu.path}
                         className={`side-links ${
-                          location.pathname === `/admin/${submenu.path}` ? "active" : ""
+                          location.pathname === `/admin/${submenu.path}`
+                            ? "active"
+                            : ""
                         }`}
                       >
-                        <Link className="nav-link" to={`/admin/${submenu.path}`} onClick={toggleSidebar}>
+                        <Link
+                          className="nav-link"
+                          to={`/admin/${submenu.path}`}
+                          onClick={toggleSidebar}
+                        >
                           {submenu.item}
                         </Link>
                       </li>
@@ -100,7 +136,7 @@ const Main = () => {
           <div className="sidebar-footer">
             <hr style={{ margin: "0px 20px" }} />
             <div className="sidebar-logo">
-              {!isCollapsed &&<img src={mooitLogo} alt="mooit-logo" />}
+              {!isCollapsed && <img src={mooitLogo} alt="mooit-logo" />}
               <div onClick={toggleCollapse}>
                 {isCollapsed ? <IoIosArrowDropright /> : <IoIosArrowDropleft />}
               </div>

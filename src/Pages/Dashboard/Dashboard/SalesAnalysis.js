@@ -1,116 +1,97 @@
-import React, { useEffect, useRef } from "react";
-import { salesAnalysis } from "../../../Data/DashboardData";
-import {
-  Chart,
-  DoughnutController,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-// Register necessary Chart.js components
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+import React from "react";
+import { LineChart } from "@mui/x-charts/LineChart";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { RiEqualizerLine } from "react-icons/ri";
 
 const SalesAnalysis = () => {
-  const chartRef = useRef(null);
-  const chartInstanceRef = useRef(null);
-
-  // Chart colors
-  const chartColors = ["#FF6384", "#36A2EB", "#FFCE56", "#8E44AD"];
-
-  useEffect(() => {
-    const chartCtx = chartRef.current.getContext("2d");
-
-    // Extract labels and numerical data for the chart
-    const labels = salesAnalysis.map((item) => item.item);
-    const data = salesAnalysis.map((item) => parseFloat(item.data)); // Convert "34%" to 34
-
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    chartInstanceRef.current = new Chart(chartCtx, {
-      type: "doughnut",
-      data: {
-        //   labels,
-        datasets: [
-          {
-            data,
-            backgroundColor: chartColors,
-            hoverBackgroundColor: chartColors,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (tooltipItem) {
-                // Safely map index to get the data value and category dynamically
-                const index = tooltipItem.dataIndex;
-                const category = salesAnalysis[index]?.item || "Unknown";
-                const value = salesAnalysis[index]?.data || "0%";
-
-                return `${category}: ${value}`;
-              },
-            },
-          },
-          legend: {
-            position: "top",
-          },
-        },
-      },
-    });
-
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, []);
-
+  const options = ["All Time", "Monthly", "This Week", "This year"];
+  const ITEM_HEIGHT = 48;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedTimeOption, setSelectedTimeOption] =React.useState("All Time");
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
-      <div className="col-md-4 sales-analysis-outer-container">
-        <div className="sales-analysis-head">
-          <div className="col-md-5">Sales Analysis - Categories</div>
-        <div className="dropdown-container">
-            <select className="custom-dropdown">
-            <option value="all-time">All Time</option>
-            <option value="monthly">Monthly</option>
-            <option value="this-week">This Week</option>
-            <option value="this-year">This Year</option>
-            </select>
-          </div>
-        </div>
-          <div className="categories-box">
-            <div className="col-md-7">
-            <canvas ref={chartRef}
-            className="sales-analysis-chart"
-          />
+    <div className="sales-analysis-outer-container">
+      <div className="sales-analysis-head">
+        <div className="sales-analysis-text">Sales Analysis - Categories</div>
+        <div className="selected-filter-data">{selectedTimeOption}</div>
+        <div>
+          <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <div className="sales-filter-icon">
+              <RiEqualizerLine size={20} />
             </div>
-        <div className="col-md-5">
-          {salesAnalysis.map((sales, index) => (
-            <div className="category-description" key={index}>
-              <p className="me-5" style={{color: "#0A1959"}}>
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "12px",
-                    height: "12px",
-                    backgroundColor: chartColors[index],
-                    marginRight: "8px",
-                    borderRadius: "2px",
-                  }}
-                ></span>
-                {sales.item}
-              </p>
-              <p className="count" style={{color: "#0A1959"}}>{sales.data}%</p>
-            </div>
-          ))}
+          </IconButton>
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              paper: {
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "15ch",
+                },
+              },
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem
+                key={option}
+                selected={option === selectedTimeOption}
+                onClick={() => {
+                  setSelectedTimeOption(option);
+                  handleClose();
+                }}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </div>
       </div>
-        </div>
+      <LineChart
+        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+        series={[
+          {
+            data: [2, 5.5, 2, 8.5, 1.5, 5],
+            area: true,
+            curve: "natural",
+            // color: "#a285d3",
+            color:"#7d7f91",
+          },
+        ]}
+        height={300}
+        sx={{
+          "& .MuiChartsAxis-tickLabel": {
+            fill: "white",
+          },
+          "& .MuiChartsAxis-line": {
+            stroke: "white",
+          },
+          "& .MuiChartsAxis-tick": {
+            stroke: "white",
+          },
+        }}
+      />
+    </div>
   );
 };
 

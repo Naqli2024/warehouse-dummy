@@ -16,13 +16,9 @@ import Shipments from "./Pages/Dashboard/InventoryManagement/Shipments/Shipments
 import Return from "./Pages/Dashboard/Return";
 import VendorPayment from "./Pages/Dashboard/VendorPayment";
 import Customer from "./Pages/Dashboard/InventoryManagement/Customer/Customer";
-import Invoices from "./Pages/Dashboard/Invoices";
 import VendorManagement from "./Pages/Dashboard/VendorManagement";
 import Dashboard from "./Pages/Dashboard/Dashboard/Dashboard";
-import PurchaseList from "./Pages/Dashboard/Purchase/PurchaseList";
-import Vendors from "./Pages/Dashboard/Purchase/Vendors/Vendors";
 import Items from "./Pages/Dashboard/InventoryManagement/Items/Items";
-import PurchaseDetails from "./Pages/Dashboard/Purchase/PurchaseDetails";
 import Sales from "./Pages/Dashboard/InventoryManagement/Sales/Sales";
 import SalesReturn from "./Pages/Dashboard/InventoryManagement/SalesReturn/SalesReturn";
 import CreditNote from "./Pages/Dashboard/InventoryManagement/CreditNote/CreditNote";
@@ -30,9 +26,6 @@ import DeliveryChallans from "./Pages/Dashboard/InventoryManagement/DeliveryChal
 import SourceDepartment from "./Pages/Dashboard/InventoryManagement/SourceDepartment/SourceDepartment";
 import Category from "./Pages/Dashboard/InventoryManagement/Category/Category";
 import SalesInvoice from "./Pages/Dashboard/InventoryManagement/SalesInvoice/SalesInvoice";
-import PurchaseInvoice from "./Pages/Dashboard/Purchase/PurchaseInvoice/PurchaseInvoice";
-import PurchaseReturn from "./Pages/Dashboard/Purchase/PurchaseReturn/PurchaseReturn";
-import DebitNote from "./Pages/Dashboard/Purchase/DebitNote/DebitNote";
 import Employees from "./Pages/Dashboard/Employees/Employees";
 import TransferLog from "./Pages/Dashboard/WarehouseManagement/TransferLog/TransferLog";
 import Login from "./Pages/Auth/Login";
@@ -48,11 +41,24 @@ import UserSettings from "./Pages/Accounts/UserSettings";
 import CompanyDetailsForm from "./Pages/CompanyDetails/CompanyDetailsForm";
 import Storage from "./Pages/Dashboard/WarehouseManagement/Storage/Storage";
 import CreateWarehouse from "./Pages/Dashboard/WarehouseManagement/WarehouseCreation/CreateWarehouse";
-import Home from "./Pages/Dashboard/WarehouseManagement/WarehouseCreation/WarehouseStructure/Home";
+import PurchaseIndent from "./Pages/Dashboard/Purchase/Purchase Indent/PurchaseIndent";
+import QuoteRequest from "./Pages/Dashboard/Purchase/QuoteRequest/QuoteRequest";
+import PurchaseOrder from "./Pages/Dashboard/Purchase/PurchaseOrder/PurchaseOrder";
+import GRN from "./Pages/Dashboard/Purchase/GRN/GRN";
+import ReceivingQC from "./Pages/Dashboard/Purchase/ReceivingQC/ReceivingQC";
+import Put from "./Pages/Dashboard/Purchase/Put/Put";
+import DebitNote from "./Pages/Dashboard/Purchase/DebitNote/DebitNote";
+import VendorMain from "./Pages/Vendor/VendorDashboard/VendorMain";
+import VendorDashboard from "./Pages/Vendor/VendorDashboard/VendorDashboard";
+import VendorRFQ from "./Pages/Vendor/QuoteManagement/VendorRFQ/VendorRFQ";
+import VendorQuotation from "./Pages/Vendor/QuoteManagement/VendorQuotation/VendorQuotation";
+import Inventory from "./Pages/Vendor/Inventory/Inventory";
+import { ToastContainer } from "react-toastify";
+import VendorRegistration from "./Pages/Vendor/VendorSignUp/VendorRegistration";
 
 function App() {
   const location = useLocation();
-  const showHeader = !["/","/login", "/signup","/user/updatePassword","/admin/authentication"].includes(location.pathname);
+  const showHeader = !["/","/login", "/signup","/user/updatePassword","/admin/authentication","/vendor-register"].includes(location.pathname);
   return (
     <>
       {showHeader && <DashboardHeader />} 
@@ -60,19 +66,23 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/vendor-register" element={<VendorRegistration />} />
           <Route path="/user/updatePassword" element={<UpdatePassword />} />
           <Route path="/admin/authentication" element={<Authentication/>} />
           <Route path="/admin" element={<Main />}>
             <Route index element={<Navigate to="/admin/dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="purchase-list" element={<PurchaseList />} />
-            <Route path="vendors" element={<Vendors />} />
-            <Route path="purchase-details/:id" element={<PurchaseDetails />} />
+            <Route path="purchase-Indent" element={<PurchaseIndent />} />
+            <Route path="quote-request" element={<QuoteRequest />} />
+            <Route path="purchase-order" element={<PurchaseOrder />} />
+            <Route path="receiving-qc" element={<ReceivingQC />} />
+            <Route path="grn" element={<GRN />} />
+            <Route path="put" element={<Put />} />
+            <Route path="debit-note" element={<DebitNote />} />
             <Route path="items" element={<Items />} />
             <Route path="sales" element={<Sales />} />
             <Route path="sales-return" element={<SalesReturn />} />
             <Route path="credit-note" element={<CreditNote />} />
-            <Route path="debit-note" element={<DebitNote />} />
             <Route path="salesorder" element={<SalesOrder />} />
             <Route path="packages" element={<Packages />} />
             <Route path="shipments" element={<Shipments />} />
@@ -86,8 +96,6 @@ function App() {
             <Route path="vendor-payment" element={<VendorPayment />} />
             <Route path="customer" element={<Customer />} />
             <Route path="sales-invoice" element={<SalesInvoice />} />
-            <Route path="purchase-invoice" element={<PurchaseInvoice />} />
-            <Route path="purchase-return" element={<PurchaseReturn />} />
             <Route path="employees" element={<Employees />} />
             <Route path="company-details" element={<CompanyDetailsForm />} />
             <Route path="warehouse" element={<CreateWarehouse />} />
@@ -99,6 +107,13 @@ function App() {
             <Route path="settings" element={<UserSettings/>} />
             <Route path="delete-account" element={<DeleteAccount/>} />
           </Route>
+          <Route path="/admin/vendor" element={<VendorMain />}>
+            <Route index element={<Navigate to="/admin/vendor/vendor-dashboard" />} />
+            <Route path="vendor-dashboard" element={<VendorDashboard/>} />
+            <Route path="rfq" element={<VendorRFQ/>} />
+            <Route path="quotation" element={<VendorQuotation/>} />
+            <Route path="inventory-management" element={<Inventory/>} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
     </>
@@ -108,6 +123,7 @@ function App() {
 const AppWrapper = () => (
   <Router>
     <App />
+    <ToastContainer/>
   </Router>
 );
 

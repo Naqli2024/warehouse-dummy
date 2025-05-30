@@ -1,112 +1,94 @@
-import React, { useEffect, useRef } from "react";
-import {
-  Chart,
-  BubbleController,
-  Tooltip,
-  Legend,
-  PointElement,
-  LinearScale,
-  Title,
-} from "chart.js";
-import { StockAvailable } from "../../../Data/DashboardData";
-
-Chart.register(
-  BubbleController,
-  PointElement,
-  LinearScale,
-  Tooltip,
-  Legend,
-  Title
-);
+import React from "react";
+import { PieChart } from "@mui/x-charts/PieChart";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { RiEqualizerLine } from "react-icons/ri";
 
 const StockAvailability = () => {
-  const chartRef = useRef(null);
-  const chartInstanceRef = useRef(null);
-
-  useEffect(() => {
-    const chartCtx = chartRef.current.getContext("2d");
-  
-    const parsedData = StockAvailable.map((item, index) => ({
-      x: index * 0.8 + 1, 
-      y: parseFloat(item.data) * 0.8,
-      r: Math.max(parseFloat(item.data) / 1, 12), 
-    }));
-  
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-  
-    chartInstanceRef.current = new Chart(chartCtx, {
-      type: "bubble",
-      data: {
-        datasets: [
-          {
-            label: "Stock Availability",
-            data: parsedData,
-            backgroundColor: ["#36A2EB", "#FF6384"],
-            hoverBackgroundColor: ["#36A2EB", "#FF6384"],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (tooltipItem) {
-                const index = tooltipItem.dataIndex;
-                const stock = StockAvailable[index]?.stock || "Unknown";
-                const value = StockAvailable[index]?.data || "0%";
-                return `${stock}: ${value}`;
-              },
-            },
-          },
-          legend: {
-            display: false,
-          },
-        },
-        scales: {
-          x: {
-            display: false, 
-          },
-          y: {
-            display: false, 
-          },
-        },
-      },
-    });
-  
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, []);
-
+  const options = ["All Time", "Monthly", "This Week", "This year"];
+  const ITEM_HEIGHT = 48;
+const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedTimeOption, setSelectedTimeOption] =React.useState("All Time");
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const pieData = [
+    { id: 0, value: 40, label: "In Stock" },
+    { id: 1, value: 35, label: "Out of Stock" },
+    { id: 2, value: 25, label: "Available Stock" },
+  ];
+  const valueFormatter = (item) => `${item.value}%`;
   return (
-    <div className="col-md-4 sales-analysis-outer-container">
+    <div className="stock-availability-outer-container">
       <div className="sales-analysis-head">
-          <div className="col-md-5">Stock Availability</div>
-          <div className="col-md-2 stock-avail-separator"/>
-        <div className="col-md-5 stock-avail-head-text">
-          <p>Total Value</p>
-          <p>44445 SAR</p>
-          </div>
+        <div className="sales-analysis-text">Stock Availability</div>
+        <div className="selected-filter-data">{selectedTimeOption}</div>
+        <div>
+          <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <div className="stock-filter-icon">
+              <RiEqualizerLine size={20} />
+            </div>
+          </IconButton>
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              paper: {
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "15ch",
+                },
+              },
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem
+                key={option}
+               selected={option === selectedTimeOption}
+                onClick={() => {
+                  setSelectedTimeOption(option);
+                  handleClose();
+                }}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </div>
-        <div className="dropdown-container p-4">
-        <select className="custom-dropdown">
-          <option value="all-time">All Warehouses</option>
-          <option value="monthly">Warehouse 1</option>
-          <option value="this-week">Warehouse 2</option>
-          <option value="this-year">Warehouse 3</option>
-        </select>
       </div>
-      <div style={{ alignItems: "center", height: "100%" }}>
-        <div style={{ flex: "1", position: "relative", height: "100%" }}>
-          <canvas ref={chartRef}></canvas>
-        </div>
-
+      <div className="stock-chart">
+         <PieChart
+        series={[
+          {
+            data: pieData,
+            highlightScope: { fade: "global", highlight: "item" },
+            faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+            valueFormatter,
+          },
+        ]}
+        height={300}
+        width={300}
+        slotProps={{
+          legend: { hidden: true },
+        }}
+      />
       </div>
     </div>
   );

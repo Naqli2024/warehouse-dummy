@@ -1,4 +1,8 @@
 import React, { useEffect, useRef } from "react";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { RiEqualizerLine } from "react-icons/ri";
 import {
   Chart,
   BarController,
@@ -11,7 +15,6 @@ import {
 } from "chart.js";
 import { productSaleData } from "../../../Data/DashboardData";
 
-// Register necessary Chart.js components
 Chart.register(
   BarController,
   BarElement,
@@ -23,6 +26,17 @@ Chart.register(
 );
 
 const ProductSale = () => {
+  const options = ["All Time", "Monthly", "This Week", "This year"];
+  const ITEM_HEIGHT = 48;
+  const [selectedTimeOption, setSelectedTimeOption] =React.useState("All Time");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -31,13 +45,9 @@ const ProductSale = () => {
     const labels = productSaleData.map((item) => item.month);
     const grossMargins = productSaleData.map((item) => item.data.GrossMargin);
     const revenues = productSaleData.map((item) => item.data.Revenue);
-
-    // Destroy the existing chart instance if it exists
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
-
-    // Create a new chart instance
     chartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
@@ -86,8 +96,6 @@ const ProductSale = () => {
         },
       },
     });
-
-    // Cleanup function to destroy the chart on component unmount
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
@@ -96,43 +104,80 @@ const ProductSale = () => {
   }, []);
 
   return (
-        <div className="col-md-12 product-sale">
+        <div className="col-md-12 product-sale-container">
         <div className="sales-analysis-head">
-          <div className="col-md-5">Error Monitoring System</div>
-          <div className="dropdown-container">
-            <select className="custom-dropdown">
-              <option value="all-time">All Time</option>
-              <option value="monthly">Monthly</option>
-              <option value="this-week">This Week</option>
-              <option value="this-year">This Year</option>
-            </select>
-          </div>
+        <div className="top-selling-text">Error Monitoring System</div>
+        <div className="error-selected-filter">{selectedTimeOption}</div>
+        <div>
+          <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <div className="selling-filter-icon">
+              <RiEqualizerLine size={20} />
+            </div>
+          </IconButton>
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              paper: {
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "15ch",
+                },
+              },
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem
+                key={option}
+                selected={option === selectedTimeOption}
+                onClick={() => {
+                  setSelectedTimeOption(option);
+                  handleClose();
+                }}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </div>
+      </div>
         <div className="product-sale-box">
           <div className="error-container">
             <p className="error-indicator" />
-            <p className="me-5">Picking Errors</p>
-            <p>3</p>
+            <p>Picking Errors</p>
+            <p className="error-count">3</p>
           </div>
           <div className="error-container">
             <p className="red-error-indicator" />
-            <p className="me-5">Packing Errors</p>
-            <p>3</p>
+            <p>Packing Errors</p>
+            <p className="error-count">3</p>
           </div>
           <div className="error-container">
             <p className="error-indicator" />
-            <p className="me-5">Manufacturing defects</p>
-            <p>3</p>
+            <p>Manufacturing defects</p>
+            <p className="error-count">3</p>
           </div>
           <div className="error-container">
             <p className="error-indicator" />
-            <p className="me-5">Labelling issues</p>
-            <p>3</p>
+            <p>Labelling issues</p>
+            <p className="error-count">3</p>
           </div>
           <div className="error-container">
             <p className="error-indicator" />
-            <p className="me-5">Sorting issues</p>
-            <p>3</p>
+            <p>Sorting issues</p>
+            <p className="error-count">3</p>
           </div>
         </div>
         <canvas className="canvas-height" ref={chartRef} style={{ maxHeight: "350px" }}></canvas>

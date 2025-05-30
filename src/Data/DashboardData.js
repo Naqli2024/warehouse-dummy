@@ -53,7 +53,7 @@ export const productData = [
   },
   {
     image: Returns,
-    name: "Shipping",
+    name: "Returns",
     count: 600,
   },
 ];
